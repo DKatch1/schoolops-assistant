@@ -22,7 +22,7 @@ if st.button("Get Answer") and prompt:
     with st.spinner("Thinking..."):
         client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
         response = client.chat.completions.create(
-            model="gpt-4",
+            model="gpt-4-turbo",  # ← THIS FIXES THE ISSUE
             messages=[
                 {"role": "system", "content": "You are a school operations assistant responding using Alliance's attendance policy documents only."},
                 {"role": "user", "content": prompt},
