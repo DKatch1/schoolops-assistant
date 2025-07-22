@@ -1,7 +1,5 @@
-
 import streamlit as st
-import openai
-import os
+from openai import OpenAI
 
 # --- CONFIG ---
 st.set_page_config(page_title="SchoolOps Assistant", page_icon="🎓", layout="centered")
@@ -22,14 +20,15 @@ prompt = st.text_area("Your Question:", placeholder="e.g., When do I use the L0 
 
 if st.button("Get Answer") and prompt:
     with st.spinner("Thinking..."):
-        openai.api_key = st.secrets["OPENAI_API_KEY"]  # set this in Streamlit Cloud secrets
-        response = openai.ChatCompletion.create(
+        client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+        response = client.chat.completions.create(
             model="gpt-4",
             messages=[
                 {"role": "system", "content": "You are a school operations assistant responding using Alliance's attendance policy documents only."},
                 {"role": "user", "content": prompt},
             ],
-            max_tokens=600
+            max_tokens=600,
+            temperature=0.3
         )
         answer = response.choices[0].message.content
         st.markdown("### 📘 Answer")
