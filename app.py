@@ -1,5 +1,5 @@
 import streamlit as st
-from openai import OpenAI  # Make sure your OpenAI package is up to date
+from openai import OpenAI  # Requires openai>=1.0.0
 
 # --- CONFIG ---
 st.set_page_config(page_title="SchoolOps Assistant", page_icon="🎓", layout="centered")
@@ -24,9 +24,9 @@ if st.button("Get Answer") and prompt.strip():
             # Initialize OpenAI client
             client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
-            # Call GPT-4 Turbo
+            # Call GPT-4o
             response = client.chat.completions.create(
-                model="gpt-4-turbo",
+                model="gpt-4o",
                 messages=[
                     {"role": "system", "content": "You are a school operations assistant responding using Alliance's attendance policy documents only. Respond clearly and professionally."},
                     {"role": "user", "content": prompt}
@@ -35,9 +35,11 @@ if st.button("Get Answer") and prompt.strip():
                 temperature=0.3
             )
 
+            # Display result
             answer = response.choices[0].message.content
             st.markdown("### 📘 Answer")
             st.write(answer)
 
         except Exception as e:
             st.error(f"❌ An error occurred: {e}")
+
